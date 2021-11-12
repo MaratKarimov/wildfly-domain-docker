@@ -1,0 +1,35 @@
+version: '3.7'
+
+services:
+
+  wf-domain:
+    #    image: sleepingtalent/wildfly-domain-with-app
+    build:
+      context: './'
+    ports:
+      - "9990:9990"
+      - "9999:9999"
+    command: "--host-config host-master.xml -b 0.0.0.0 -bmanagement 0.0.0.0"
+    networks:
+      wf-cluster-network:
+        ipv4_address: 172.30.0.100
+
+  wf-host:
+    #    image: sleepingtalent/wildfly-domain-with-app
+    build:
+      context: './'
+    ports:
+      - "8080:8080"
+    environment:
+      - "CONTROLLER_TYPE=host"
+      - "DOMAIN_HOST=172.30.0.100"
+    command: "--host-config host-slave.xml"
+    networks:
+      wf-cluster-network:
+        ipv4_address: 172.30.0.101
+
+networks:
+  wf-cluster-network:
+    ipam:
+      config:
+        - subnet: 172.30.0.0/16
