@@ -11,8 +11,8 @@ services:
       - "9999:9999"
     command: "--host-config host-master.xml -b 0.0.0.0 -bmanagement 0.0.0.0"
     networks:
-      wf-cluster-network:
-        ipv4_address: 172.30.0.100
+      artemis-cluster-network:
+        ipv4_address: 172.50.0.100
 
   wf-host:
     #    image: sleepingtalent/wildfly-domain-with-app
@@ -22,14 +22,14 @@ services:
       - "8080:8080"
     environment:
       - "CONTROLLER_TYPE=host"
-      - "DOMAIN_HOST=172.30.0.100"
+      - "DOMAIN_HOST=172.50.0.100"
     command: "--host-config host-slave.xml"
     networks:
-      wf-cluster-network:
-        ipv4_address: 172.30.0.101
+      artemis-cluster-network:
+        ipv4_address: 172.50.0.101
 
 networks:
-  wf-cluster-network:
+  artemis-cluster-network:
     ipam:
       config:
-        - subnet: 172.30.0.0/16
+        - subnet: 172.50.0.0/16
